@@ -45,14 +45,14 @@ module washerFSM(
     // Form the next state
     always @(*) begin
         next_state = state; // when no case statement is satisfied
+        Agitator = 1'b0;
+        Motor = 1'b0;
+        Pump = 1'b0;
+        R = 1'b1;
+        Speed = 1'b0;
+        Water = 1'b0;
         case(state)
             idle: begin
-                Agitator = 1'b0;
-                Motor = 1'b0;
-                Pump = 1'b0;
-                R = 1'b0;
-                Speed = 1'b0;
-                Water = 1'b0;
                 if (Start == 0) begin
                     next_state = idle;
                 end
@@ -76,7 +76,6 @@ module washerFSM(
                 R = 1'b0;
                 Agitator = 1'b1;
                 Motor = 1'b1;
-                Water = 1'b0;
                 if(Tw == 0) begin
                     next_state = wash;
                     end
@@ -88,8 +87,6 @@ module washerFSM(
             drain_1:begin
                 R = 1'b0;
                 Pump = 1'b1;
-                Agitator = 1'b0;
-                Motor = 1'b0;
                 if(Td == 0) begin
                     next_state = drain_1;
                     end
@@ -101,55 +98,50 @@ module washerFSM(
             fill_2:begin
                 R = 1'b0;
                 Water = 1'b1;
-                Pump = 1'b0;
                 if(Tf == 0) begin
                     next_state = fill_2;
                     end
                 else if(Tf == 1) begin
                     next_state = rinse;
-                    R = 1'b1;
                     end
             end 
             rinse:begin
                 R = 1'b0;
                 Agitator = 1'b1;
                 Motor = 1'b1;
-                Water = 1'b0;
                 if(Tr == 0) begin
                     next_state = rinse;
                 end
                 else if(Tr == 1) begin
                     next_state = drain_2;
-                    R = 1'b1;
                 end
             end 
             drain_2:begin
                 R = 1'b0;
                 Pump = 1'b1;
-                Agitator = 1'b0;
-                Motor = 1'b0;
                 if(Td == 0) begin
                     next_state = drain_2;
                 end
                 else if(Td == 1) begin
                     next_state = spin;
-                    R = 1'b1;
                 end
             end 
             spin: begin
                 R = 1'b0;
-                Pump = 1'b0;
                 Motor = 1'b1;
                 Speed = 1'b1;
-                if(Ts == 0) begin 
+                if(Door == 1)begin
+                    next_state = hold;
+                end
+                else if(Ts == 0) begin
                     next_state = spin;
                 end
                 else if(Ts == 1)begin 
                     next_state = idle;
-                    R = 1'b1;
                 end
             end
             hold: begin
+                R = 1'b1;
                 if (Door == 1)begin
                     next_state = hold;
                 end

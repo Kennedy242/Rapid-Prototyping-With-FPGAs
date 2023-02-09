@@ -71,7 +71,7 @@ module washerTop_tb;
         #375 reset = 1'b1;
         #10 reset = 1'b0; Start = 1'b1;
         #10 Start = 1'b0;
-        #305 Door = 1;
+        #315 Door = 1;
         #20 Door = 0;
     end
 endmodule
