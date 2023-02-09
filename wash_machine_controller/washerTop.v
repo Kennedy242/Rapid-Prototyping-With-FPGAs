@@ -25,7 +25,6 @@ module washerTop(
      wire Tr;
      wire Ts;
      wire Tw;
-     wire hold;
      wire R;
 
 
@@ -34,7 +33,6 @@ module washerTop(
         .load(load), 
 		.clk(clk), 
 		.R(R), 
-        .hold(hold),
 		.Td(Td), 
 		.Tf(Tf), 
 		.Tr(Tr), 
@@ -46,7 +44,6 @@ module washerTop(
 		.clk(clk), 
 		.reset(reset), 
 		.Door(Door), 
-        .hold(hold),
 		.Start(Start), 
 		.Td(Td), 
 		.Tf(Tf), 

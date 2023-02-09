@@ -20,7 +20,6 @@ module washerFSM(
     output reg Motor,
     output reg Pump,
     output reg R,
-    output reg hold,
     output reg Speed,
     output reg Water
     );
@@ -35,11 +34,11 @@ module washerFSM(
     parameter rinse = 4'b0101;
     parameter drain_2 = 4'b0110;
     parameter spin = 4'b0111;
-    parameter holdState = 4'b1000;
+    parameter hold = 4'b1000;
 
 // update next state
     always @(posedge clk, posedge reset) begin
-        if (reset == 1'b1) begin state <= idle; R <= 1'b1; hold <= 1'b0; end
+        if (reset == 1'b1) begin state <= idle; end
         else state <= next_state;
     end
 
@@ -54,7 +53,6 @@ module washerFSM(
                 R = 1'b0;
                 Speed = 1'b0;
                 Water = 1'b0;
-                hold = 1'b0;
                 if (Start == 0) begin
                     next_state = idle;
                 end
@@ -143,7 +141,6 @@ module washerFSM(
                 Pump = 1'b0;
                 Motor = 1'b1;
                 Speed = 1'b1;
-                hold = 1'b0;
                 if(Ts == 0) begin 
                     next_state = spin;
                 end
@@ -152,10 +149,9 @@ module washerFSM(
                     R = 1'b1;
                 end
             end
-            holdState: begin
-                hold = 1'b1;
+            hold: begin
                 if (Door == 1)begin
-                    next_state = holdState;
+                    next_state = hold;
                 end
                 else if (Door == 0)begin
                     next_state = spin;

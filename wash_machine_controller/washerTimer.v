@@ -11,7 +11,6 @@ module washerTimer(
     input wire [1:0]load,
     input wire clk,
     input wire R,
-    input wire hold,
     output reg Td,
     output reg Tf,
     output reg Tr,
