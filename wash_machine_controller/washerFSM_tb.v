@@ -12,7 +12,7 @@ module washerFSM_tb;
 
 	// Inputs
 	reg clk;
-    reg reset;
+   reg reset;
 	reg Door;
 	reg Start;
 	reg Td;
@@ -28,13 +28,12 @@ module washerFSM_tb;
 	wire R;
 	wire Speed;
 	wire Water;
-    wire hold;
 
 
 	// Instantiate the Unit Under Test (UUT)
 	washerFSM uut (
 		.clk(clk), 
-        .reset(reset),
+      .reset(reset),
 		.Door(Door), 
 		.Start(Start), 
 		.Td(Td), 
@@ -47,8 +46,7 @@ module washerFSM_tb;
 		.Pump(Pump), 
 		.R(R), 
 		.Speed(Speed), 
-		.Water(Water),
-        .hold(hold)
+		.Water(Water)
 	);
 
 
@@ -106,7 +104,7 @@ module washerFSM_tb;
 
         #10 Tr = 0; Td = 1; // move to spin 
 
-        #20 Door = 1;
+        #10 Door = 1;
 
         #20 Door = 0;
 

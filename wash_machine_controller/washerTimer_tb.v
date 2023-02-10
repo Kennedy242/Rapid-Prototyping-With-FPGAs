@@ -6,14 +6,13 @@
 // Project Name:  Wash_machine_controller
 //
 //////////////////////////////////////////////////////////////////////////////////
-module testbenchy(
+module washerTimer_tb(
     );
 	 
 	 // Inputs
 	reg [1:0] load;
 	reg clk;
 	reg R;
-	reg hold;
 
 	// Outputs
 	wire Td;
@@ -27,7 +26,6 @@ module testbenchy(
 		.load(load), 
 		.clk(clk), 
 		.R(R), 
-		.hold(hold),
 		.Td(Td), 
 		.Tf(Tf), 
 		.Tr(Tr), 
@@ -43,7 +41,6 @@ module testbenchy(
 		// Initialize Inputs
 		load = 2'b00;
 		R = 1'b1;
-		hold = 1'b0;
 
 		// Wait 100 ns for global reset to finish
 		#100;
@@ -57,7 +54,6 @@ module testbenchy(
 		#150 R =  1'b1; load = 2'b10;
 		#5 R = 1'b0;
 
-		#20 hold = 1;
 	end
 
 endmodule
