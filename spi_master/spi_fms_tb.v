@@ -21,14 +21,23 @@ module spi_master_tb;
 	wire SPIMOSI;
 	wire SPIMISO;
 
-	// Instantiate the Unit Under Test (UUT)
-	spi_master uut (
+	// Instantiate the Units Under Test (UUT)
+	spi_master spi_master (
 		.reset(reset), 
 		.clk(clk),
 		.get_rdid(get_rdid),
 		.SPICLK(SPICLK),
 		.SPIMOSI(SPIMOSI),
 		.SPIMISO(SPIMISO)
+	);
+
+	m25p16 m25p16(
+		.c(SPICLK),
+		.data_in(SPIMOSI),
+		.s(0),
+		.w(1),
+		.hold(0),
+		.data_out(SPIMISO)
 	);
 
 	always begin 
