@@ -1,0 +1,23 @@
+# ignore because they are deleted in project clean up
+*.ini
+*.prj
+*.exe
+*.cmd
+*.wdb
+*.log
+isim/
+
+# ignore these directories bc I don't want to see them
+_xmsgs/
+ipcore_dir/
+iseconfig/
+*.xmsgs
+*.html
+*.gise
+*.xise
+*.wcfg
+
+# not related to FPGA
+*.code-workspace
+
+
