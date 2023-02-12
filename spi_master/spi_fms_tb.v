@@ -49,8 +49,20 @@ module spi_master_tb;
 		get_rdid = 1;
 
 		#20 get_rdid = 0;
-
 	end
-      
+
+	// self checking testbench
+	initial begin
+		#10 $display("*************** test begin *******************");
+		#140 if(SPIMOSI != 1) $display( "RDID[7] failed");
+		#20 if(SPIMOSI != 0) $display( "RDID[6] failed");
+		#20 if(SPIMOSI != 0) $display( "RDID[5] failed");
+		#20 if(SPIMOSI != 1) $display( "RDID[4] failed");
+		#20 if(SPIMOSI != 1) $display( "RDID[3] failed");
+		#20 if(SPIMOSI != 1) $display( "RDID[2] failed");
+		#20 if(SPIMOSI != 1) $display( "RDID[1] failed");
+		#20 if(SPIMOSI != 1) $display( "RDID[0] failed");
+		$display("*************** test end *******************");
+	end
 endmodule
 

@@ -25,6 +25,8 @@ module spi_master(
     reg data_received;
     reg chip_select;
 
+    // Constants
+    parameter RDID_instruction = 8'h9F;
     parameter idle = 3'b000;
     parameter assert_cs = 3'b001;
     parameter send_instruction = 3'b010;
@@ -39,6 +41,8 @@ module spi_master(
     always @(*) begin
         send_inst_flag = 0;
         get_data_flag = 0;
+        SPIMOSI = 0;
+        // SPIMISO = 0;
         case(state) 
         idle: begin 
             instruction_sent = 0;
@@ -52,7 +56,7 @@ module spi_master(
         end
         send_instruction: begin  
             send_inst_flag = 1;
-            count_inst = 4'b0111;
+            count_inst = 7;
             if (instruction_sent == 1) next_state = get_data;
         end
         get_data: begin 
@@ -71,9 +75,12 @@ module spi_master(
     end
 
     // Send instruction
+    integer i;
     always @(negedge clk ) begin
         if(send_inst_flag == 1) begin
-            // TODO: Send instruction here
+            //  FIXME: Instructing is getting cut off at last index
+            // SPIMOSI should go hight with chip_select?
+            SPIMOSI <= RDID_instruction[count_inst]; // Send instruction
             count_inst <= count_inst - 1;
             if(count_inst == 0) instruction_sent <= 1;
         end
@@ -82,10 +89,16 @@ module spi_master(
     // Send data
     always @(negedge clk ) begin
         if(get_data_flag == 1) begin
-            // TODO: Send data here
+            // TODO: Read data here
             count_data <= count_data - 1;
             if(count_data == 0) data_received <= 1;
         end
+    end
+
+    always @(* ) begin
+        // TODO: should SPI clk be based on cs?
+        if(chip_select) SPICLK = clk;
+        else SPICLK = 0;
     end
 
     // For annotation on testbench
