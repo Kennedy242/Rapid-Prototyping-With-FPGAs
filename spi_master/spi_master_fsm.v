@@ -1,14 +1,17 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // 
-// Module Name:    spi_master_fsm 
+// Module Name:    spi_master
 // Project Name: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module spi_master_fsm(
+module spi_master(
     input reset,
     input clk, 
-    input get_rdid
+    input get_rdid,
+    output reg SPICLK,
+    output reg SPIMOSI,
+    output reg SPIMISO
     );
 
     // Internal signals
@@ -49,12 +52,12 @@ module spi_master_fsm(
         end
         send_instruction: begin  
             send_inst_flag = 1;
-            count_inst = 4'b1000;
+            count_inst = 4'b0111;
             if (instruction_sent == 1) next_state = get_data;
         end
         get_data: begin 
             get_data_flag = 1;
-            count_data = 5'b1_1000;
+            count_data = 23;
             if (data_received == 1) next_state = deAssert_cs;
         end
         deAssert_cs: begin 
@@ -70,7 +73,7 @@ module spi_master_fsm(
     // Send instruction
     always @(negedge clk ) begin
         if(send_inst_flag == 1) begin
-            // TODO: Send data here
+            // TODO: Send instruction here
             count_inst <= count_inst - 1;
             if(count_inst == 0) instruction_sent <= 1;
         end
