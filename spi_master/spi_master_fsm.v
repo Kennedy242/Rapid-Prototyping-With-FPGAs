@@ -1,4 +1,5 @@
 `timescale 1ns / 1ps
+`default_nettype none
 //////////////////////////////////////////////////////////////////////////////////
 // 
 // Module Name:    spi_master
@@ -6,9 +7,9 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module spi_master(
-    input reset,
-    input clk, 
-    input get_rdid,
+    input wire reset,
+    input wire clk,
+    input wire get_rdid,
     output reg SPICLK,
     output reg SPIMOSI,
     output reg SPIMISO
