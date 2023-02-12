@@ -34,12 +34,13 @@ module spi_master_tb;
 	m25p16 m25p16(
 		.c(SPICLK),
 		.data_in(SPIMOSI),
-		.s(0),
-		.w(1),
-		.hold(0),
+		.s(1'b0),
+		.w(1'b1),
+		.hold(1'b0),
 		.data_out(SPIMISO)
 	);
 
+	// system clock
 	always begin 
 		clk = 1'b0;
 		forever #10 clk = ~clk;
