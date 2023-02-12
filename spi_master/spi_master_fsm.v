@@ -20,7 +20,7 @@ module spi_master_fsm(
     reg get_data_flag;
     reg instruction_sent;
     reg data_received;
-    reg cs;
+    reg chip_select;
 
     parameter idle = 3'b000;
     parameter assert_cs = 3'b001;
@@ -38,10 +38,13 @@ module spi_master_fsm(
         get_data_flag = 0;
         case(state) 
         idle: begin 
+            instruction_sent = 0;
+            data_received = 0;
+            chip_select = 0;
             if(get_rdid == 1) next_state = assert_cs;
         end
         assert_cs: begin 
-            cs = 1;
+            chip_select = 1;
             next_state = send_instruction;
         end
         send_instruction: begin  
@@ -55,7 +58,7 @@ module spi_master_fsm(
             if (data_received == 1) next_state = deAssert_cs;
         end
         deAssert_cs: begin 
-            cs = 0;
+            chip_select = 0;
             next_state = idle;
         end
         default: begin 
@@ -65,7 +68,7 @@ module spi_master_fsm(
     end
 
     // Send instruction
-    always @(posedge clk ) begin
+    always @(negedge clk ) begin
         if(send_inst_flag == 1) begin
             // TODO: Send data here
             count_inst <= count_inst - 1;
@@ -74,7 +77,7 @@ module spi_master_fsm(
     end
 
     // Send data
-    always @(posedge clk ) begin
+    always @(negedge clk ) begin
         if(get_data_flag == 1) begin
             // TODO: Send data here
             count_data <= count_data - 1;
