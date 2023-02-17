@@ -26,7 +26,7 @@ module spi_master_tb;
 		.reset(reset), 
 		.clk(clk),
 		.get_rdid(get_rdid),
-		.o_SPICLK(SPICLK),
+		.SPICLK(SPICLK),
 		.SPIMOSI(SPIMOSI),
 		.SPIMISO(SPIMISO)
 	);

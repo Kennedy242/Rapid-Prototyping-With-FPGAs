@@ -10,23 +10,21 @@ module spi_master(
     input wire reset,
     input wire clk,
     input wire get_rdid,
-    output reg o_SPICLK,
-    output reg SPIMOSI,
-    output reg SPIMISO,
-    output reg o_chip_select
+    input wire SPIMISO,
+    output reg SPICLK,
+    output wire SPIMOSI,
+    output reg chip_select
     );
 
     // Internal signals
     reg[127:0]ascii_state, ascii_next_state; //for testbench annotation
     reg [2:0] state, next_state;
-    reg [3:0] count_inst;
+    reg [2:0] count_inst;
     reg [4:0] count_data;
     reg send_inst_flag;
     reg get_data_flag;
     reg instruction_sent;
     reg data_received;
-    reg chip_select;
-    reg SPICLK;
 
     // Constants
     parameter RDID_instruction = 8'h9F;
@@ -44,33 +42,40 @@ module spi_master(
     always @(*) begin
         send_inst_flag = 0;
         get_data_flag = 0;
-        SPIMOSI = 0;
-        // SPIMISO = 0;
+        chip_select = 1'b1;
+
         case(state) 
         idle: begin 
-            instruction_sent = 0;
-            data_received = 0;
-            chip_select = 1'b1;
             if(get_rdid == 1) next_state = assert_cs;
+            else next_state = idle;
         end
+
         assert_cs: begin 
             chip_select = 1'b0;
             next_state = send_instruction;
         end
+
         send_instruction: begin  
+            chip_select = 1'b0;
             send_inst_flag = 1;
-            count_inst = 7;
+            count_inst = 3'b111; // 7
             if (instruction_sent == 1) next_state = get_data;
+            else next_state = send_instruction; 
         end
+
         get_data: begin 
+            chip_select = 1'b0;
             get_data_flag = 1;
             count_data = 23;
             if (data_received == 1) next_state = deAssert_cs;
+            else next_state = get_data;
         end
+
         deAssert_cs: begin 
             chip_select = 1'b1;
             next_state = idle;
         end
+
         default: begin 
             next_state = idle;
         end
@@ -78,19 +83,17 @@ module spi_master(
     end
 
     // Send instruction
-    integer i;
-    always @(negedge o_SPICLK ) begin
+    always @(negedge SPICLK ) begin
         if(send_inst_flag == 1) begin
-            //  FIXME: Instructing is getting cut off at last index
-            // SPIMOSI should go hight with chip_select?
-            SPIMOSI <= RDID_instruction[count_inst]; // Send instruction
-            count_inst <= count_inst - 1;
+            count_inst <= count_inst - 3'b001;
             if(count_inst == 0) instruction_sent <= 1;
         end
     end
 
+    assign SPIMOSI = RDID_instruction[count_inst]; // Send instruction
+
     // Send data
-    always @(negedge o_SPICLK) begin
+    always @(negedge SPICLK) begin
         if(get_data_flag == 1) begin
             // TODO: Read data here
             count_data <= count_data - 1;
@@ -98,24 +101,11 @@ module spi_master(
         end
     end
 
-    // register chip select
-    always @(posedge clk or posedge reset) begin
-        if(reset) o_chip_select <= 1;
-        else o_chip_select <= chip_select;
-    end
-
     // generate SPI clock
     always @(posedge clk or posedge reset) begin
-        // TODO: should SPI clk be based on cs?
-        // FIXME: don't free run spiCLK
         if(reset) SPICLK <= 1'b0;
-        else SPICLK <= ~SPICLK;
-    end
-
-    // register SPI clock output
-    always @(posedge clk or posedge reset) begin
-        if(reset) o_SPICLK <= 0;
-        else o_SPICLK <= SPICLK;
+        else if (state == send_instruction  || state == get_data) SPICLK <= ~SPICLK; // is this condition right?
+        else if (chip_select == 1) SPICLK <= 1'b0;
     end
 
     // For annotation on testbench
