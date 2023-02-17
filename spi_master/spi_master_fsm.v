@@ -10,7 +10,7 @@ module spi_master(
     input wire reset,
     input wire clk,
     input wire get_rdid,
-    output reg SPICLK,
+    output reg o_SPICLK,
     output reg SPIMOSI,
     output reg SPIMISO,
     output reg o_chip_select
@@ -26,6 +26,7 @@ module spi_master(
     reg instruction_sent;
     reg data_received;
     reg chip_select;
+    reg SPICLK;
 
     // Constants
     parameter RDID_instruction = 8'h9F;
@@ -78,7 +79,7 @@ module spi_master(
 
     // Send instruction
     integer i;
-    always @(negedge clk ) begin
+    always @(negedge o_SPICLK ) begin
         if(send_inst_flag == 1) begin
             //  FIXME: Instructing is getting cut off at last index
             // SPIMOSI should go hight with chip_select?
@@ -89,7 +90,7 @@ module spi_master(
     end
 
     // Send data
-    always @(negedge clk ) begin
+    always @(negedge o_SPICLK) begin
         if(get_data_flag == 1) begin
             // TODO: Read data here
             count_data <= count_data - 1;
@@ -103,10 +104,18 @@ module spi_master(
         else o_chip_select <= chip_select;
     end
 
-    always @(* ) begin
+    // generate SPI clock
+    always @(posedge clk or posedge reset) begin
         // TODO: should SPI clk be based on cs?
-        if(!chip_select) SPICLK = clk;
-        else SPICLK = 0;
+        // FIXME: don't free run spiCLK
+        if(reset) SPICLK <= 1'b0;
+        else SPICLK <= ~SPICLK;
+    end
+
+    // register SPI clock output
+    always @(posedge clk or posedge reset) begin
+        if(reset) o_SPICLK <= 0;
+        else o_SPICLK <= SPICLK;
     end
 
     // For annotation on testbench

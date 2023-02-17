@@ -26,7 +26,7 @@ module spi_master_tb;
 		.reset(reset), 
 		.clk(clk),
 		.get_rdid(get_rdid),
-		.SPICLK(SPICLK),
+		.o_SPICLK(SPICLK),
 		.SPIMOSI(SPIMOSI),
 		.SPIMISO(SPIMISO)
 	);
@@ -43,7 +43,7 @@ module spi_master_tb;
 	// system clock
 	always begin 
 		clk = 1'b0;
-		forever #10 clk = ~clk;
+		forever #5 clk = ~clk;
 	end
 
 	initial begin
@@ -58,7 +58,7 @@ module spi_master_tb;
 		reset = 0;
 		get_rdid = 1;
 
-		#20 get_rdid = 0;
+		#10 get_rdid = 0;
 	end
 
 	// self checking testbench
