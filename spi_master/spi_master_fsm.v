@@ -12,7 +12,8 @@ module spi_master(
     input wire get_rdid,
     output reg SPICLK,
     output reg SPIMOSI,
-    output reg SPIMISO
+    output reg SPIMISO,
+    output reg o_chip_select
     );
 
     // Internal signals
@@ -48,11 +49,11 @@ module spi_master(
         idle: begin 
             instruction_sent = 0;
             data_received = 0;
-            chip_select = 0;
+            chip_select = 1'b1;
             if(get_rdid == 1) next_state = assert_cs;
         end
         assert_cs: begin 
-            chip_select = 1;
+            chip_select = 1'b0;
             next_state = send_instruction;
         end
         send_instruction: begin  
@@ -66,7 +67,7 @@ module spi_master(
             if (data_received == 1) next_state = deAssert_cs;
         end
         deAssert_cs: begin 
-            chip_select = 0;
+            chip_select = 1'b1;
             next_state = idle;
         end
         default: begin 
@@ -96,9 +97,15 @@ module spi_master(
         end
     end
 
+    // register chip select
+    always @(posedge clk or posedge reset) begin
+        if(reset) o_chip_select <= 1;
+        else o_chip_select <= chip_select;
+    end
+
     always @(* ) begin
         // TODO: should SPI clk be based on cs?
-        if(chip_select) SPICLK = clk;
+        if(!chip_select) SPICLK = clk;
         else SPICLK = 0;
     end
 
