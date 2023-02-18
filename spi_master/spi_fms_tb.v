@@ -20,6 +20,7 @@ module spi_master_tb;
 	wire SPICLK;
 	wire SPIMOSI;
 	wire SPIMISO;
+	wire chip_select;
 
 	// Instantiate the Units Under Test (UUT)
 	spi_master spi_master (
@@ -28,13 +29,14 @@ module spi_master_tb;
 		.get_rdid(get_rdid),
 		.SPICLK(SPICLK),
 		.SPIMOSI(SPIMOSI),
-		.SPIMISO(SPIMISO)
+		.SPIMISO(SPIMISO),
+		.chip_select(chip_select)
 	);
 
 	m25p16 m25p16(
 		.c(SPICLK),
 		.data_in(SPIMOSI),
-		.s(1'b0),
+		.s(chip_select),
 		.w(1'b1),
 		.hold(1'b0),
 		.data_out(SPIMISO)
@@ -64,7 +66,8 @@ module spi_master_tb;
 	// self checking testbench
 	initial begin
 		#10 $display("*************** test begin *******************");
-		#140 if(SPIMOSI != 1) $display( "RDID[7] failed");
+
+		#115 if(SPIMOSI != 1) $display( "RDID[7] failed");
 		#20 if(SPIMOSI != 0) $display( "RDID[6] failed");
 		#20 if(SPIMOSI != 0) $display( "RDID[5] failed");
 		#20 if(SPIMOSI != 1) $display( "RDID[4] failed");
@@ -72,6 +75,35 @@ module spi_master_tb;
 		#20 if(SPIMOSI != 1) $display( "RDID[2] failed");
 		#20 if(SPIMOSI != 1) $display( "RDID[1] failed");
 		#20 if(SPIMOSI != 1) $display( "RDID[0] failed");
+
+
+		#20 if(SPIMISO != 0) $display( "manufacture ID [7] failed");
+		#20 if(SPIMISO != 0) $display( "manufacture ID [6] failed");
+		#20 if(SPIMISO != 1) $display( "manufacture ID [5] failed");
+		#20 if(SPIMISO != 0) $display( "manufacture ID [4] failed");
+		#20 if(SPIMISO != 0) $display( "manufacture ID [3] failed");
+		#20 if(SPIMISO != 0) $display( "manufacture ID [2] failed");
+		#20 if(SPIMISO != 0) $display( "manufacture ID [1] failed");
+		#20 if(SPIMISO != 0) $display( "manufacture ID [0] failed");
+
+		#20 if(SPIMISO != 0) $display( "memory type [7] failed");
+		#20 if(SPIMISO != 0) $display( "memory type [6] failed");
+		#20 if(SPIMISO != 1) $display( "memory type [5] failed");
+		#20 if(SPIMISO != 0) $display( "memory type [4] failed");
+		#20 if(SPIMISO != 0) $display( "memory type [3] failed");
+		#20 if(SPIMISO != 0) $display( "memory type [2] failed");
+		#20 if(SPIMISO != 0) $display( "memory type [1] failed");
+		#20 if(SPIMISO != 0) $display( "memory type [0] failed");
+
+		#20 if(SPIMISO != 0) $display( "memory cap [7] failed");
+		#20 if(SPIMISO != 0) $display( "memory cap [6] failed");
+		#20 if(SPIMISO != 0) $display( "memory cap [5] failed");
+		#20 if(SPIMISO != 1) $display( "memory cap [4] failed");
+		#20 if(SPIMISO != 0) $display( "memory cap [3] failed");
+		#20 if(SPIMISO != 1) $display( "memory cap [2] failed");
+		#20 if(SPIMISO != 0) $display( "memory cap [1] failed");
+		#20 if(SPIMISO != 1) $display( "memory cap [0] failed");
+
 		$display("*************** test end *******************");
 	end
 endmodule
