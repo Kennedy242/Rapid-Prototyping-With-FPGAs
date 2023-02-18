@@ -25,6 +25,11 @@ module spi_master(
     reg get_data_flag;
     reg instruction_sent;
     reg data_received;
+    reg [23:0] read_data;
+    wire [7:0] manufacture_id;
+    wire [7:0] memory_type;
+    wire [7:0] memory_capacity;
+
 
     // Constants
     parameter RDID_instruction = 8'h9F;
@@ -92,14 +97,21 @@ module spi_master(
 
     assign SPIMOSI = RDID_instruction[count_inst]; // Send instruction
 
-    // Send data
+    // receive data
     always @(negedge SPICLK) begin
         if(get_data_flag == 1) begin
-            // TODO: Read data here
             count_data <= count_data - 1;
             if(count_data == 0) data_received <= 1;
         end
     end
+
+    always @(posedge SPICLK ) begin
+        read_data[count_data] = SPIMISO; // get data from slave
+    end
+
+    assign manufacture_id = read_data[23:16];
+    assign memory_type = read_data[15:8];
+    assign memory_capacity = read_data[7:0];
 
     // generate SPI clock
     always @(posedge clk or posedge reset) begin
