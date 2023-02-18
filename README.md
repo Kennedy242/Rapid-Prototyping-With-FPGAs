@@ -17,7 +17,7 @@ git submodule add <link copied from overleaf> <name of report>
 Example: git submodule add https://git.overleaf.com/63f110afe74b04a2b05acda4 template/
 ``` 
 * In this FPGA repo, running `git status` should show that two files were changed. ./gitmodules and <name of report>/
-* commit these two files
+* Commit these two files
 ```
 Example:
  git add .
@@ -34,4 +34,9 @@ git status // should show <name of report> has new commits
 git add .
 git commit -m "update hash"
  ``` 
+
+##### Steps to finalize project once it is complete
+* Make sure all source code is pushed to git
+* In Overleaf, refresh source code files
+* Make sure the hash is updated to master in the corresponding report for the submodule
 
