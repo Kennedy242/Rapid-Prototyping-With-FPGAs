@@ -116,31 +116,35 @@ module spi_master(
     // generate SPI clock
     always @(posedge clk or posedge reset) begin
         if(reset) SPICLK <= 1'b0;
-        else if (state == send_instruction  || state == get_data) SPICLK <= ~SPICLK; // is this condition right?
         else if (chip_select == 1) SPICLK <= 1'b0;
+        else if (state == send_instruction  || data_received !== 1) SPICLK <= ~SPICLK;
     end
 
     // For annotation on testbench
+    // Each state must be 16 characters or the 
+    // testbench will have leading '_' in the state names
     always @(state) begin
         case(state) 
-        idle: ascii_state = "idle";
-        assert_cs: ascii_state = "assert_cs";
+        idle: ascii_state = "idle            ";
+        assert_cs: ascii_state = "idle            ";
         send_instruction:  ascii_state = "send_instruction";
-        get_data: ascii_state = "get_data";
-        deAssert_cs: ascii_state = "deAssert_cs";
-        default: ascii_state = "default";
+        get_data: ascii_state = "get_data        ";
+        deAssert_cs: ascii_state = "deAssert_cs     ";
+        default: ascii_state = "default         ";
         endcase
     end
 
     // For annotation on testbench
+    // Each state must be 16 characters or the 
+    // testbench will have leading '_' in the state names
     always @(next_state) begin
         case(next_state) 
-        idle: ascii_next_state = "idle";
-        assert_cs: ascii_next_state = "assert_cs";
+        idle: ascii_next_state = "idle            ";
+        assert_cs: ascii_next_state = "idle            ";
         send_instruction:  ascii_next_state = "send_instruction";
-        get_data: ascii_next_state = "get_data";
-        deAssert_cs: ascii_next_state = "deAssert_cs";
-        default: ascii_next_state = "default";
+        get_data: ascii_next_state = "get_data        ";
+        deAssert_cs: ascii_next_state = "deAssert_cs     ";
+        default: ascii_next_state = "default         ";
         endcase
     end
 endmodule
