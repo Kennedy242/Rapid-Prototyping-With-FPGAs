@@ -114,7 +114,7 @@ module spi_master(
     always @(posedge clk or posedge reset) begin
         if(reset) SPICLK <= 1'b0;
         else if (chip_select == 1) SPICLK <= 1'b0;
-        else if (state == send_instruction  || data_received != 1) SPICLK <= ~SPICLK;
+        else if (state == send_instruction  || data_received !== 1) SPICLK <= ~SPICLK;
     end
 
     // For annotation on testbench
