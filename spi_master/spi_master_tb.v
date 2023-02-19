@@ -200,11 +200,30 @@ module spi_master_tb;
 			SPICLK_edges <= SPICLK_edges + 1;
 		end
 	end
+	// end of simulation checks
 	initial begin
 		#1400 if(SPICLK_edges != 31) begin
 			$display("spi clks expected 31 edges, actual: %d", SPICLK_edges);
 			testbench_error = testbench_error + 1;
 		end
+		if(spi_master.read_data != 24'h202015) begin
+			$display("read_data expected to be 0x202015. Actual %h", spi_master.read_data);
+			testbench_error = testbench_error + 1;
+		end
+		if(spi_master.manufacture_id != 8'h20) begin
+			$display("manufacture_id expected to be 0x20. Actual %h", spi_master.manufacture_id);
+			testbench_error = testbench_error + 1;
+		end
+		if(spi_master.memory_type != 8'h20) begin
+			$display("memory_type expected to be 0x20. Actual %h", spi_master.memory_type);
+			testbench_error = testbench_error + 1;
+		end
+		if(spi_master.memory_capacity != 8'h15) begin
+			$display("memory_capacity expected to be 0x15. Actual %h", spi_master.memory_capacity);
+			testbench_error = testbench_error + 1;
+		end
+
 		if (testbench_error == 0) $display("Test passed!");
+		else $display("Test failed with %d errors", testbench_error);
 	end
 endmodule
