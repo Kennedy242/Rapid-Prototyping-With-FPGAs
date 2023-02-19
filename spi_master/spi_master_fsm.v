@@ -128,10 +128,6 @@ module spi_master(
         default: ascii_state = "default         ";
         endcase
     end
-
-    // For annotation on testbench
-    // Each state must be 16 characters or the 
-    // testbench will have leading '_' in the state names
     always @(next_state) begin
         case(next_state) 
         idle: ascii_next_state = "idle            ";
