@@ -37,6 +37,6 @@ git commit -m "update hash"
 
 ##### Steps to finalize project once it is complete
 * Make sure all source code is pushed to git
-* In Overleaf, refresh source code files
+* In Overleaf, refresh source code files and then recompile document
 * Make sure the hash is updated to master in the corresponding report for the submodule
 
