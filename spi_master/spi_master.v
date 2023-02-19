@@ -28,6 +28,8 @@ module spi_master(
 
     // Constants
     parameter RDID_instruction = 8'h9F;
+    parameter count_inst_start = 7;
+    parameter count_data_start = 23;
     parameter idle = 3'b000;
     parameter assert_cs = 3'b001;
     parameter send_instruction = 3'b010;
@@ -58,7 +60,6 @@ module spi_master(
         send_instruction: begin  
             chip_select = 1'b0;
             send_inst_flag = 1;
-            count_inst = 3'b111; // 7
             if (instruction_sent == 1) next_state = get_data;
             else next_state = send_instruction; 
         end
@@ -66,7 +67,6 @@ module spi_master(
         get_data: begin 
             chip_select = 1'b0;
             get_data_flag = 1;
-            count_data = 23;
             if (data_received == 1) next_state = deAssert_cs;
             else next_state = get_data;
         end
@@ -84,7 +84,8 @@ module spi_master(
 
     // Send instruction
     always @(negedge SPICLK ) begin
-        if(send_inst_flag == 1) begin
+        if(reset == 1) count_inst <= count_inst_start;
+        else if(send_inst_flag == 1) begin
             count_inst <= count_inst - 3'b001;
             if(count_inst == 0) instruction_sent <= 1;
         end
@@ -94,7 +95,8 @@ module spi_master(
 
     // receive data
     always @(negedge SPICLK) begin
-        if(get_data_flag == 1) begin
+        if(reset == 1) count_data <= count_data_start;
+        else if(get_data_flag == 1) begin
             count_data <= count_data - 1;
             if(count_data == 0) data_received <= 1;
         end
@@ -112,7 +114,7 @@ module spi_master(
     always @(posedge clk or posedge reset) begin
         if(reset) SPICLK <= 1'b0;
         else if (chip_select == 1) SPICLK <= 1'b0;
-        else if (state == send_instruction  || data_received !== 1) SPICLK <= ~SPICLK;
+        else if (state == send_instruction  || data_received != 1) SPICLK <= ~SPICLK;
     end
 
     // For annotation on testbench
