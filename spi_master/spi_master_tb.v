@@ -226,4 +226,10 @@ module spi_master_tb;
 		if (testbench_error == 0) $display("Test passed!");
 		else $display("Test failed with %d errors", testbench_error);
 	end
+
+	initial begin
+		// send instruction again
+		#1600 get_rdid = 1;
+		#20 get_rdid = 0;
+	end
 endmodule
