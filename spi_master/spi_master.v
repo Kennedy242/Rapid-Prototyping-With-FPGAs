@@ -95,9 +95,10 @@ module spi_master(
     assign SPIMOSI = RDID_instruction[count_inst]; // Send instruction
 
     // receive data
-    always @(negedge SPICLK) begin
+    always @(posedge clk or posedge reset) begin
         if(reset == 1) count_data <= count_data_start;
-        else if(get_data_flag == 1) begin
+        else if (get_rdid) count_data <= count_data_start;
+        else if(get_data_flag && SPICLK) begin
             count_data <= count_data - 1;
             if(count_data == 0) data_received <= 1;
         end
