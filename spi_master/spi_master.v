@@ -113,8 +113,8 @@ module spi_master(
     // generate SPI clock
     always @(posedge clk or posedge reset) begin
         if(reset) SPICLK <= 1'b0;
-        else if (chip_select == 1) SPICLK <= 1'b0;
-        else if (state == send_instruction  || data_received !== 1) SPICLK <= ~SPICLK;
+        else if ( send_inst_flag  || get_data_flag ) SPICLK <= ~SPICLK;
+        else if (get_rdid) SPICLK <= 1'b0;
     end
 
     // For annotation on testbench
