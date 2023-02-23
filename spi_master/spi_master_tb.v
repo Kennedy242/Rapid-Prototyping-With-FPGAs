@@ -61,134 +61,134 @@ module spi_master_tb;
 	initial begin
 		#10 $display("*************** test begin *******************");
 
-		#140 if(SPIMOSI != 1) begin
+		#140 if(SPIMOSI !== 1) begin
 			 $display( "RDID[7] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMOSI != 0) begin
+		#40 if(SPIMOSI !== 0) begin
 			 $display( "RDID[6] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMOSI != 0) begin
+		#40 if(SPIMOSI !== 0) begin
 			 $display( "RDID[5] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMOSI != 1) begin
+		#40 if(SPIMOSI !== 1) begin
 			 $display( "RDID[4] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMOSI != 1) begin
+		#40 if(SPIMOSI !== 1) begin
 			 $display( "RDID[3] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMOSI != 1) begin
+		#40 if(SPIMOSI !== 1) begin
 			 $display( "RDID[2] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMOSI != 1) begin
+		#40 if(SPIMOSI !== 1) begin
 			 $display( "RDID[1] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMOSI != 1) begin
+		#40 if(SPIMOSI !== 1) begin
 			 $display( "RDID[0] failed");
 			 testbench_error = testbench_error + 1;
 		end
 
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "manufacture ID [7] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "manufacture ID [6] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 1) begin
+		#40 if(SPIMISO !== 1) begin
 			 $display( "manufacture ID [5] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "manufacture ID [4] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "manufacture ID [3] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "manufacture ID [2] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "manufacture ID [1] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "manufacture ID [0] failed");
 			 testbench_error = testbench_error + 1;
 		end
 
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "memory type [7] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "memory type [6] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 1) begin
+		#40 if(SPIMISO !== 1) begin
 			 $display( "memory type [5] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "memory type [4] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "memory type [3] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "memory type [2] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "memory type [1] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "memory type [0] failed");
 			 testbench_error = testbench_error + 1;
 		end
 
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "memory cap [7] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "memory cap [6] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "memory cap [5] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 1) begin
+		#40 if(SPIMISO !== 1) begin
 			 $display( "memory cap [4] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "memory cap [3] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 1) begin
+		#40 if(SPIMISO !== 1) begin
 			 $display( "memory cap [2] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 0) begin
+		#40 if(SPIMISO !== 0) begin
 			 $display( "memory cap [1] failed");
 			 testbench_error = testbench_error + 1;
 		end
-		#40 if(SPIMISO != 1) begin
+		#40 if(SPIMISO !== 1) begin
 			 $display( "memory cap [0] failed");
 			 testbench_error = testbench_error + 1;
 		end
@@ -202,23 +202,23 @@ module spi_master_tb;
 	end
 	// end of simulation checks
 	initial begin
-		#1400 if(SPICLK_edges != 31) begin
+		#1400 if(SPICLK_edges !== 31) begin
 			$display("spi clks expected 31 edges, actual: %d", SPICLK_edges);
 			testbench_error = testbench_error + 1;
 		end
-		if(spi_master.read_data != 24'h202015) begin
+		if(spi_master.read_data !== 24'h202015) begin
 			$display("read_data expected to be 0x202015. Actual %h", spi_master.read_data);
 			testbench_error = testbench_error + 1;
 		end
-		if(spi_master.manufacture_id != 8'h20) begin
+		if(spi_master.manufacture_id !== 8'h20) begin
 			$display("manufacture_id expected to be 0x20. Actual %h", spi_master.manufacture_id);
 			testbench_error = testbench_error + 1;
 		end
-		if(spi_master.memory_type != 8'h20) begin
+		if(spi_master.memory_type !== 8'h20) begin
 			$display("memory_type expected to be 0x20. Actual %h", spi_master.memory_type);
 			testbench_error = testbench_error + 1;
 		end
-		if(spi_master.memory_capacity != 8'h15) begin
+		if(spi_master.memory_capacity !== 8'h15) begin
 			$display("memory_capacity expected to be 0x15. Actual %h", spi_master.memory_capacity);
 			testbench_error = testbench_error + 1;
 		end
