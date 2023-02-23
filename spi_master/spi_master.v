@@ -18,8 +18,6 @@ module spi_master(
     reg [4:0] count_data;
     reg send_inst_flag;
     reg get_data_flag;
-    reg instruction_sent;
-    reg data_received;
     reg [23:0] read_data;
     wire [7:0] manufacture_id;
     wire [7:0] memory_type;
@@ -28,8 +26,8 @@ module spi_master(
 
     // Constants
     parameter RDID_instruction = 8'h9F;
-    parameter count_inst_start = 7;
-    parameter count_data_start = 23;
+    parameter count_inst_start = 3'h7;
+    parameter count_data_start = 5'h18; //5'd24;
     parameter idle = 3'b000;
     parameter assert_cs = 3'b001;
     parameter send_instruction = 3'b010;
@@ -60,14 +58,14 @@ module spi_master(
         send_instruction: begin  
             chip_select = 1'b0;
             send_inst_flag = 1;
-            if (instruction_sent == 1) next_state = get_data;
+            if (count_inst == 0) next_state = get_data;
             else next_state = send_instruction; 
         end
 
         get_data: begin 
             chip_select = 1'b0;
             get_data_flag = 1;
-            if (data_received == 1) next_state = deAssert_cs;
+            if (count_data == 0) next_state = deAssert_cs;
             else next_state = get_data;
         end
 
@@ -88,7 +86,6 @@ module spi_master(
         else if (get_rdid) count_inst <= count_inst_start;
         else if(send_inst_flag && SPICLK) begin
             count_inst <= count_inst - 3'b001;
-            if(count_inst == 0) instruction_sent <= 1;
         end
     end
 
@@ -100,7 +97,6 @@ module spi_master(
         else if (get_rdid) count_data <= count_data_start;
         else if(get_data_flag && SPICLK) begin
             count_data <= count_data - 1;
-            if(count_data == 0) data_received <= 1;
         end
     end
 
