@@ -83,9 +83,10 @@ module spi_master(
     end
 
     // Send instruction
-    always @(negedge SPICLK ) begin
+    always @(posedge clk or posedge reset ) begin
         if(reset == 1) count_inst <= count_inst_start;
-        else if(send_inst_flag == 1) begin
+        else if (get_rdid) count_inst <= count_inst_start;
+        else if(send_inst_flag && SPICLK) begin
             count_inst <= count_inst - 3'b001;
             if(count_inst == 0) instruction_sent <= 1;
         end
