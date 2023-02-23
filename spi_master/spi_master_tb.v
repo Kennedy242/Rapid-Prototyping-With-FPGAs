@@ -58,8 +58,17 @@ module spi_master_tb;
 
 	// self checking testbench
 	integer testbench_error = 0;
+
+	reg [5:0] SPICLK_edges = -1;
+	always begin
+		@(posedge SPICLK) begin
+			SPICLK_edges <= SPICLK_edges + 1;
+		end
+	end
+
 	initial begin
 		#10 $display("*************** test begin *******************");
+		 $display("--------------- checking first instruction -------------------");
 
 		#140 if(SPIMOSI !== 1) begin
 			 $display( "RDID[7] failed");
@@ -194,13 +203,7 @@ module spi_master_tb;
 		end
 	end
 
-	reg [5:0] SPICLK_edges = -1;
-	always begin
-		@(posedge SPICLK) begin
-			SPICLK_edges <= SPICLK_edges + 1;
-		end
-	end
-	// end of simulation checks
+	// end of instruction checks
 	initial begin
 		#1400 if(SPICLK_edges !== 31) begin
 			$display("spi clks expected 31 edges, actual: %d", SPICLK_edges);
@@ -222,14 +225,156 @@ module spi_master_tb;
 			$display("memory_capacity expected to be 0x15. Actual %h", spi_master.memory_capacity);
 			testbench_error = testbench_error + 1;
 		end
+	end
 
-		if (testbench_error == 0) $display("Test passed!");
-		else $display("Test failed with %d errors", testbench_error);
+
+	// send instruction again
+	initial begin
+		#1600 get_rdid = 1;
+		SPICLK_edges = -1;
+		#20 get_rdid = 0;
 	end
 
 	initial begin
-		// send instruction again
-		#1600 get_rdid = 1;
-		#20 get_rdid = 0;
+		#1650 
+		$display("--------------- checking second instruction -------------------");
+		if(SPIMOSI !== 1) begin
+			 $display( "RDID[7] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMOSI !== 0) begin
+			 $display( "RDID[6] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMOSI !== 0) begin
+			 $display( "RDID[5] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMOSI !== 1) begin
+			 $display( "RDID[4] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMOSI !== 1) begin
+			 $display( "RDID[3] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMOSI !== 1) begin
+			 $display( "RDID[2] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMOSI !== 1) begin
+			 $display( "RDID[1] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMOSI !== 1) begin
+			 $display( "RDID[0] failed");
+			 testbench_error = testbench_error + 1;
+		end
+
+		#40 if(SPIMISO !== 0) begin
+			 $display( "manufacture ID [7] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 0) begin
+			 $display( "manufacture ID [6] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 1) begin
+			 $display( "manufacture ID [5] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 0) begin
+			 $display( "manufacture ID [4] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 0) begin
+			 $display( "manufacture ID [3] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 0) begin
+			 $display( "manufacture ID [2] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 0) begin
+			 $display( "manufacture ID [1] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 0) begin
+			 $display( "manufacture ID [0] failed");
+			 testbench_error = testbench_error + 1;
+		end
+
+		#40 if(SPIMISO !== 0) begin
+			 $display( "memory type [7] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 0) begin
+			 $display( "memory type [6] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 1) begin
+			 $display( "memory type [5] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 0) begin
+			 $display( "memory type [4] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 0) begin
+			 $display( "memory type [3] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 0) begin
+			 $display( "memory type [2] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 0) begin
+			 $display( "memory type [1] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 0) begin
+			 $display( "memory type [0] failed");
+			 testbench_error = testbench_error + 1;
+		end
+
+		#40 if(SPIMISO !== 0) begin
+			 $display( "memory cap [7] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 0) begin
+			 $display( "memory cap [6] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 0) begin
+			 $display( "memory cap [5] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 1) begin
+			 $display( "memory cap [4] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 0) begin
+			 $display( "memory cap [3] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 1) begin
+			 $display( "memory cap [2] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 0) begin
+			 $display( "memory cap [1] failed");
+			 testbench_error = testbench_error + 1;
+		end
+		#40 if(SPIMISO !== 1) begin
+			 $display( "memory cap [0] failed");
+			 testbench_error = testbench_error + 1;
+		end
+	end
+
+
+	// end of simulation checks
+	initial begin 
+		#3000 if (testbench_error == 0) $display("Test passed!");
+		else $display("Test failed with %d errors", testbench_error);
 	end
 endmodule
