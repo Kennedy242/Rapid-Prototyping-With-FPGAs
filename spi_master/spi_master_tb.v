@@ -49,10 +49,13 @@ module spi_master_tb;
 		// Wait 100 ns for global reset to finish
 		#100;
         
-		// Add stimulus here
+		// send instruction
 		reset = 0;
 		get_rdid = 1;
+		#20 get_rdid = 0;
 
+		// send instruction again
+		#1480 get_rdid = 1;
 		#20 get_rdid = 0;
 	end
 
@@ -68,6 +71,7 @@ module spi_master_tb;
 			SPICLK_edges <= SPICLK_edges + 1;
 		end
 	end
+
 
 	initial begin
 		#10 $display("*************** test begin *******************");
@@ -231,15 +235,9 @@ module spi_master_tb;
 	end
 
 
-	// send instruction again
-	initial begin
-		#1600 get_rdid = 1;
-		SPICLK_edges = -1;
-		#20 get_rdid = 0;
-	end
-
 	initial begin
 		#1650 
+			SPICLK_edges = -1;
 			$display("--------------- checking second instruction -------------------");
 			if(SPIMOSI !== 1) begin
 				$display( "RDID[7] failed");
@@ -371,6 +369,30 @@ module spi_master_tb;
 		#40 if(SPIMISO !== 1) begin
 			 $display( "memory cap [0] failed");
 			 testbench_error = testbench_error + 1;
+			end
+	end
+
+	// end of instruction checks
+	initial begin
+		#3000 if(SPICLK_edges !== 31) begin
+			$display("spi clks expected 31 edges, actual: %d", SPICLK_edges);
+			testbench_error = testbench_error + 1;
+			end
+			if(spi_master.read_data !== 24'h202015) begin
+				$display("read_data expected to be 0x202015. Actual %h", spi_master.read_data);
+				testbench_error = testbench_error + 1;
+			end
+			if(spi_master.manufacture_id !== 8'h20) begin
+				$display("manufacture_id expected to be 0x20. Actual %h", spi_master.manufacture_id);
+				testbench_error = testbench_error + 1;
+			end
+			if(spi_master.memory_type !== 8'h20) begin
+				$display("memory_type expected to be 0x20. Actual %h", spi_master.memory_type);
+				testbench_error = testbench_error + 1;
+			end
+			if(spi_master.memory_capacity !== 8'h15) begin
+				$display("memory_capacity expected to be 0x15. Actual %h", spi_master.memory_capacity);
+				testbench_error = testbench_error + 1;
 			end
 	end
 
