@@ -1,7 +1,16 @@
 # Rapid-Prototyping-With-FPGAs
 
 This repo will store the projects created for the course ECE-5211 Rapid Prototyping with FPGAs.
+
+###### Homework 3 - wash_machine_controller
+* Design and simulate controller for wash machine
+###### Homework 4 - spi_master
+* Design, simulate and synthesize a serial peripheral interface (SPI) to support an RDID instruction
+###### Homework 5 - rdid_instruction
+* < description >
+    
  <br>
+
  #### Reports
 Project reports will be written in LaTex and stored in reports/\<corresponding project name>. The reports are written using [Overleaf](https://www.overleaf.com) and each report is a submodule to this repo.<br>
 ##### Instructions to add a new report as a submodule to the project:
