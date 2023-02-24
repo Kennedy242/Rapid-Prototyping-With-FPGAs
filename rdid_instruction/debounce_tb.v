@@ -76,4 +76,25 @@ module debounce_tb;
         button_push = 0;
         // end of simulated bounce
 	end
+
+    // self checking testbench
+	integer testbench_error = 0;
+
+    initial begin
+		#10 $display("*************** test begin *******************");
+		#1310750 if(data_debounced !== 1) begin
+            $display("Data_debounced expected to be 1. Actual %d", data_debounced);
+            testbench_error = testbench_error + 1;
+            end
+        #3310770 if(data_debounced !== 0) begin
+            $display("Data_debounced expected to be 1. Actual %d", data_debounced);
+            testbench_error = testbench_error + 1;
+            end
+    end
+
+    // end of simulation checks
+	initial begin 
+		#4000 if (testbench_error == 0) $display("Test passed!");
+		else $display("Test failed with %d errors", testbench_error);
+	end
 endmodule
