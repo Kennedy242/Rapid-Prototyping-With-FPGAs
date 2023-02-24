@@ -22,7 +22,7 @@ module debounce (
 
 	always @(posedge clk or posedge reset) begin
 		if (reset) 
-			data_debounced <= 16'b0;
+			data_debounced <= 1'b0;
 		else if (change_reg == 16'hFFFF)
 			data_debounced <= data_in;
 	end 

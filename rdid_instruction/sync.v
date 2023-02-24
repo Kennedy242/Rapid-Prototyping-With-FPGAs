@@ -5,10 +5,10 @@ module sync(
 );
 
 always @(negedge clk or posedge set) begin
-    if(set == 0)
-    data_q = 0;
+    if(set == 1)
+    data_q <= 1;
     else 
-    data_q = 1;
+    data_q <= 0;
 end
 
 endmodule
