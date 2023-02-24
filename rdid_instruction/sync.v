@@ -1,11 +1,14 @@
 module sync(
     input wire clk,
-    input wire data_in,
-    output reg data_out
+    input wire set,
+    output reg data_q
 );
 
-always @(negedge clk) begin
-    data_out = data_in;
+always @(negedge clk or posedge set) begin
+    if(set == 0)
+    data_q = 0;
+    else 
+    data_q = 1;
 end
 
 endmodule
