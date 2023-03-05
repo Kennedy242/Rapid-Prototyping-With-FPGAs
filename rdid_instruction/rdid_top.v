@@ -22,9 +22,10 @@ module rdid_top(
 
     // Internal signals
     wire get_rdid_debounced;
-    wire get_rdid;
     wire get_rdid_oneShot;
-    wire reset_sync;
+    wire get_rdid;
+    wire reset_debounced;
+    wire reset;
     wire [7:0] manufacture_id;
     wire [7:0] memory_type;
     wire [7:0] memory_capacity;
@@ -44,7 +45,6 @@ module rdid_top(
 
     debounce debounce_get_rdid ( 
         .clk(CCLK),
-        .reset(reset_sync),
         .data_in(get_rdid_btn),
         .data_debounced(get_rdid_debounced)
     );
@@ -59,14 +59,19 @@ module rdid_top(
         .sync_out(get_rdid)
     );
 
-    reset_sync reset_synchronizer(
+    debounce debounce_reset ( 
         .clk(CCLK),
-        .set(reset_btn),
-        .data_q(reset_sync)
+        .data_in(reset_btn),
+        .data_debounced(reset_debounced)
+    );
+    sync reset_sync(
+        .clk(CCLK),
+        .async_in(reset_debounced),
+        .sync_out(reset)
     );
 
 	spi_master spi_master (
-		.reset(reset_sync), 
+		.reset(reset), 
 		.clk(CCLK),
 		.get_rdid(get_rdid),
 		.SPICLK(SPICLK),

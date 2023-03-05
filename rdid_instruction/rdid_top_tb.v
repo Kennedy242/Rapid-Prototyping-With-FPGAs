@@ -23,7 +23,8 @@ module rdid_top_tb();
     wire LD6;
     wire LD7;
 
-    reg button_push; // Test signal
+    reg reset_button_push; // Test signal
+    reg rdid_button_push; // Test signal
 
     // Instantiate the Unit Under Test (UUT)
     rdid_top rdid_top(
@@ -66,7 +67,8 @@ module rdid_top_tb();
         reset_btn = 0;
         get_rdid_btn = 0;
         SW = 2'b00;
-        button_push = 0;
+        reset_button_push = 0;
+        rdid_button_push = 0;
         
         // Wait 100 ns for global reset to finish
         #100;
@@ -74,7 +76,8 @@ module rdid_top_tb();
         // Start stimulus
         // simulate bouncing
         //  TODO: make this a for loop
-        button_push = 1;
+        #200 reset_button_push = 1;
+        reset_btn = 1;
         #0.5 reset_btn = 0;
         #0.5 reset_btn = 1;
         #0.5 reset_btn = 0;
@@ -85,7 +88,8 @@ module rdid_top_tb();
         #0.5 reset_btn = 1;
         #0.5 reset_btn = 0;
         #0.5 reset_btn = 1;
-        #0.5 reset_btn = 0;
+
+        #1310900 reset_btn = 0;
         #0.5 reset_btn = 1;
         #0.5 reset_btn = 0;
         #0.5 reset_btn = 1;
@@ -94,30 +98,12 @@ module rdid_top_tb();
         #0.5 reset_btn = 0;
         #0.5 reset_btn = 1;
         #0.5 reset_btn = 0;
-        #0.5 reset_btn = 1;
-        #0.5 reset_btn = 0;
-        #0.5 reset_btn = 1;
-        #0.5 reset_btn = 0;
-        #0.5 reset_btn = 1;
-        #0.5 reset_btn = 0;
-        #0.5 reset_btn = 1;
-        #0.5 reset_btn = 0;
-        #0.5 reset_btn = 1;
-        #0.5 reset_btn = 0;
-        #0.5 reset_btn = 1;
-        #0.5 reset_btn = 0;
-        #0.5 reset_btn = 1;
-        #0.5 reset_btn = 0;
-        #0.5 reset_btn = 1;
-        #0.5 reset_btn = 0;
-        #0.5 reset_btn = 1;
-        #0.5 reset_btn = 0;
-        button_push = 0;
+        reset_button_push = 0;
         // end of simulated bounce
 
         // simulate bouncing
         //  TODO: make this a for loop
-        #200 button_push = 1;
+        #200000 rdid_button_push = 1;
         get_rdid_btn = 1;
         #0.5 get_rdid_btn = 0;
         #0.5 get_rdid_btn = 1;
@@ -139,14 +125,14 @@ module rdid_top_tb();
         #0.5 get_rdid_btn = 0;
         #0.5 get_rdid_btn = 1;
         #0.5 get_rdid_btn = 0;
-        button_push = 0;
+        rdid_button_push = 0;
         // end of simulated bounce
 
 
         // Another RDID assertion
         // simulate bouncing
         //  TODO: make this a for loop
-        #2000000  button_push = 1;
+        #2000000  rdid_button_push = 1;
         get_rdid_btn = 1;
         #0.5 get_rdid_btn = 0;
         #0.5 get_rdid_btn = 1;
@@ -168,7 +154,7 @@ module rdid_top_tb();
         #0.5 get_rdid_btn = 0;
         #0.5 get_rdid_btn = 1;
         #0.5 get_rdid_btn = 0;
-        button_push = 0;
+        rdid_button_push = 0;
         // end of simulated bounce
     end
     
@@ -178,7 +164,8 @@ module rdid_top_tb();
     
     initial begin
         #10 $display("*************** test begin *******************");
-        #1312345 test_signal = ~test_signal; 
+        #2823240 $display( "INFO: first  rdid check" );
+            test_signal = ~test_signal;
             if(rdid_top.ledMux.LED !== 8'h15) begin
                 $display( "mem cap LED failed. Expected 0x15 Actual %h", rdid_top.ledMux.LED );
                 testbench_error = testbench_error + 1;
@@ -201,7 +188,9 @@ module rdid_top_tb();
                 $display( "default case LED failed. Expected 0xFF Actual %h", rdid_top.ledMux.LED );
                 testbench_error = testbench_error + 1;
 			end
-        #3312335 SW = 2'b00;
+        #3312335
+            $display( "INFO: second rdid check" );
+            SW = 2'b00;
         #10 test_signal = ~test_signal; 
             if(rdid_top.ledMux.LED !== 8'h15) begin
                 $display( "mem cap LED failed. Expected 0x15 Actual %h", rdid_top.ledMux.LED );
@@ -229,7 +218,7 @@ module rdid_top_tb();
     
     // end of simulation checks
     initial begin 
-        #4624830 if (testbench_error == 0) $display("Test passed!");
+        #6500000 if (testbench_error == 0) $display("Test passed!");
         else $display("Test failed with %d errors", testbench_error);
     end
 endmodule
