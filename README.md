@@ -7,7 +7,7 @@ This repo will store the projects created for the course ECE-5211 Rapid Prototyp
 ###### Homework 4 - spi_master
 * Design, simulate and synthesize a serial peripheral interface (SPI) to support an RDID instruction
 ###### Homework 5 - rdid_instruction
-* < description >
+* Implement the SPI master for the ST Micro M25P16 Serial Flash designed in the previous lab on the Spartan 3E demo prototyping board
     
  <br>
 
@@ -30,7 +30,7 @@ Example: git submodule add https://git.overleaf.com/63f110afe74b04a2b05acda4 tem
 ```
 Example:
  git add .
- git commit -m "add <name of report> as a submodule
+ git commit -m "add <name of report> as a submodule"
 ```
  Every time an edit is made to the report in overleaf, this repo will contain the changes. 
  * To update the report in this FPGA repo, navigate to <name of report> directory and run the following commands: 
