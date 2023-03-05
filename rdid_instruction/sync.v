@@ -1,14 +1,19 @@
-module sync(
+`timescale 1ns / 1ps
+`default_nettype none
+
+module sync (
     input wire clk,
-    input wire set,
-    output reg data_q
+    input wire async_in,
+    output reg sync_out
 );
 
-always @(negedge clk or posedge set) begin
-    if(set == 1)
-    data_q <= 1;
-    else 
-    data_q <= 0;
-end
+reg q1;
 
+always @(negedge clk ) begin
+    sync_out <= q1;
+end
+always @(negedge clk ) begin
+    q1 <= async_in;
+end
+    
 endmodule

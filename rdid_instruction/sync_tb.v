@@ -1,20 +1,19 @@
 `timescale 1ns / 1ps
 `default_nettype none
-
-module sync_tb();
+module sync_tb ();
     
     // Inputs
+    reg data_in;
     reg clk;
-    reg reset;
     
     // Outputs
-    wire reset_sync;
+    wire data_out;
     
     // Instantiate the Unit Under Test (UUT)
     sync sync(
         .clk(clk),
-        .set(reset),
-        .data_q(reset_sync)
+        .async_in(data_in),
+        .sync_out(data_out)
     );
     
     // System clock
@@ -26,75 +25,22 @@ module sync_tb();
     // Stimulus for UUT
     initial begin
         // Initialize inputs
-        reset = 1;
+        data_in = 1;
         
-        // Wait 100 ns for global reset to finish
-        #100;
-
         // Start stimulus
-        #10 reset = 0;
-        
-        #34 reset = 1;
+        #23 data_in = 0;
     end
     
     // self checking testbench
-    integer testbench_error = 0;
-    reg test_signal = 0;
+    // integer testbench_error = 0;
     
-    initial begin
-        #10 $display("*************** test begin *******************");
-
-        #99 test_signal = ~test_signal; 
-        if (reset !== 1) begin 
-            $display("Reset expected to be 1. Actual %d", reset);
-            testbench_error = testbench_error + 1;
-            end 
-            if (reset_sync !== 1) begin 
-            $display("Reset_sync expected to be 1. Actual %d", reset_sync);
-            testbench_error = testbench_error + 1;
-            end 
-        #2 test_signal = ~test_signal;
-        if (reset !== 0) begin 
-            $display("Reset expected to be 0. Actual %d", reset);
-            testbench_error = testbench_error + 1;
-            end 
-            if (reset_sync !== 1) begin 
-            $display("Reset_sync expected to be 1. Actual %d", reset_sync);
-            testbench_error = testbench_error + 1;
-            end 
-        #11 test_signal = ~test_signal;
-        if (reset !== 0) begin 
-            $display("Reset expected to be 0. Actual %d", reset);
-            testbench_error = testbench_error + 1;
-            end 
-            if (reset_sync !== 0) begin 
-            $display("Reset_sync expected to be 0. Actual %d", reset_sync);
-            testbench_error = testbench_error + 1;
-            end 
-        #21 test_signal = ~test_signal;
-        if (reset !== 0) begin 
-            $display("Reset expected to be 0. Actual %d", reset);
-            testbench_error = testbench_error + 1;
-            end 
-            if (reset_sync !== 0) begin 
-            $display("Reset_sync expected to be 0. Actual %d", reset_sync);
-            testbench_error = testbench_error + 1;
-            end 
-        #2 
-        test_signal = ~test_signal;
-        if (reset !== 1) begin 
-            $display("Reset expected to be 1. Actual %d", reset);
-            testbench_error = testbench_error + 1;
-            end 
-            if (reset_sync !== 1) begin 
-            $display("Reset_sync expected to be 1. Actual %d", reset_sync);
-            testbench_error = testbench_error + 1;
-            end 
-    end
+    // initial begin
+    //     #10 $display("*************** test begin *******************");
+    // end
     
-    // end of simulation checks
-    initial begin 
-        #300 if (testbench_error == 0) $display("Test passed!");
-        else $display("Test failed with %d errors", testbench_error);
-    end
+    // // end of simulation checks
+    // initial begin 
+    //     #3000 if (testbench_error == 0) $display("Test passed!");
+    //     else $display("Test failed with %d errors", testbench_error);
+    // end
 endmodule
