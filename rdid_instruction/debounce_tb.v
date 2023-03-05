@@ -9,7 +9,6 @@
 module debounce_tb;
 
     // Inputs
-    reg reset;
     reg data_in;
     reg clk;
 
@@ -22,7 +21,6 @@ module debounce_tb;
     // Instantiate the Units Under Test (UUT)
     debounce debounce_UUT (
         .clk(clk),
-        .reset(reset),
         .data_in(data_in),
         .data_debounced(data_debounced)
     );
@@ -36,14 +34,11 @@ module debounce_tb;
     // Stimulus for UUT
 	initial begin
 		// Initialize Inputs
-		reset = 1;
         data_in = 0;
         button_push = 0;
-        
-		// Wait 100 ns for global reset to finish
-		#20;
-        reset = 0;
 
+        #20;
+        
         // simulate bouncing
         #0.5 data_in = 1;
         button_push = 1;
@@ -58,10 +53,8 @@ module debounce_tb;
         #0.5 data_in = 0;
         #0.5 data_in = 1;
         button_push = 0;
-        // end of simulated bounce
 
 	    #2000000 // 2ms
-        // simulate bouncing again
         button_push = 1;
         #0.5 data_in = 1;
         #0.5 data_in = 0;
@@ -79,14 +72,17 @@ module debounce_tb;
 
     // self checking testbench
 	integer testbench_error = 0;
+    reg test_signal = 0;
 
     initial begin
 		#10 $display("*************** test begin *******************");
-		#1310750 if(data_debounced !== 1) begin
+		#1310750  test_signal = ~test_signal; 
+            if(data_debounced !== 1) begin
             $display("Data_debounced expected to be 1. Actual %d", data_debounced);
             testbench_error = testbench_error + 1;
             end
-        #3310770 if(data_debounced !== 0) begin
+        #3310770 test_signal = ~test_signal; 
+            if(data_debounced !== 0) begin
             $display("Data_debounced expected to be 1. Actual %d", data_debounced);
             testbench_error = testbench_error + 1;
             end
@@ -94,7 +90,7 @@ module debounce_tb;
 
     // end of simulation checks
 	initial begin 
-		#4000 if (testbench_error == 0) $display("Test passed!");
+		#1600000 if (testbench_error == 0) $display("Test passed!");
 		else $display("Test failed with %d errors", testbench_error);
 	end
 endmodule
