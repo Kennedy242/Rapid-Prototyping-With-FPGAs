@@ -8,21 +8,19 @@ module spi_master(
     input wire SPIMISO,
     output reg SPICLK,
     output wire SPIMOSI,
-    output reg chip_select
+    output reg chip_select,
+    output wire [7:0] manufacture_id,
+    output wire [7:0] memory_type,
+    output wire [7:0] memory_capacity
     );
 
     // Internal signals
-    reg[127:0]ascii_state, ascii_next_state; //for testbench annotation
     reg [2:0] state, next_state;
     reg [2:0] count_inst;
     reg [4:0] count_data;
     reg send_inst_flag;
     reg get_data_flag;
     reg [23:0] read_data;
-    wire [7:0] manufacture_id;
-    wire [7:0] memory_type;
-    wire [7:0] memory_capacity;
-
 
     // Constants
     parameter RDID_instruction = 8'h9F;
@@ -115,9 +113,12 @@ module spi_master(
         else if (get_rdid) SPICLK <= 1'b0;
     end
 
+    // synopsys translate_off
+
     // For annotation on testbench
     // Each state must be 16 characters or the 
     // testbench will have leading '_' in the state names
+    reg[127:0]ascii_state, ascii_next_state;
     always @(state) begin
         case(state) 
         idle: ascii_state = "idle            ";
@@ -138,4 +139,6 @@ module spi_master(
         default: ascii_next_state = "default         ";
         endcase
     end
+    // synopsys translate_on
+
 endmodule
