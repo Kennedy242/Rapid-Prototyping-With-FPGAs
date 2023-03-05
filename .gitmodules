@@ -4,3 +4,6 @@
 [submodule "reports/template"]
 	path = reports/template
 	url = https://git.overleaf.com/63f110afe74b04a2b05acda4
+[submodule "reports/implement_spi_master"]
+	path = reports/implement_spi_master
+	url = https://git.overleaf.com/6403fed94e042b23569cd123
