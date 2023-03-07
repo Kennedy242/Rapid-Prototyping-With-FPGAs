@@ -113,6 +113,7 @@ module rdid_top_tb();
         for (i=0; i<8; i = i + 1) begin
             #0.5 get_rdid_btn = ~get_rdid_btn;
         end
+        rdid_button_push = 0;
         // end of simulated bounce
 
 
@@ -130,6 +131,20 @@ module rdid_top_tb();
         end
         rdid_button_push = 0;
         // end of simulated bounce
+
+        // simulate bouncing
+        #500000 reset_button_push = 1;
+        reset_btn = 1;
+        for (i=0; i<10; i = i + 1) begin
+            #0.5 reset_btn = ~reset_btn;
+        end
+
+        #1310900 reset_btn = 0;
+         for (i=0; i<8; i = i + 1) begin
+            #0.5 reset_btn = ~reset_btn;
+        end
+        reset_button_push = 0;
+        // end of simulated bounce
     end
     
     // self checking testbench
@@ -138,7 +153,7 @@ module rdid_top_tb();
     
     initial begin
         #10 $display("*************** test begin *******************");
-        #2823240 $display( "INFO: first  rdid check" );
+        #2823240 $display( "INFO: first  rdid test" );
             test_signal = ~test_signal;
             if(rdid_top.ledMux.LED !== 8'h15) begin
                 $display( "mem cap LED failed. Expected 0x15 Actual %h", rdid_top.ledMux.LED );
@@ -163,7 +178,7 @@ module rdid_top_tb();
                 testbench_error = testbench_error + 1;
 			end
         #3312335
-            $display( "INFO: second rdid check" );
+            $display( "INFO: second rdid test" );
             {SW1,SW0} = 2'b00;
         #10 test_signal = ~test_signal; 
             if(rdid_top.ledMux.LED !== 8'h15) begin
@@ -189,10 +204,25 @@ module rdid_top_tb();
                 testbench_error = testbench_error + 1;
 			end
     end
+
+
+    initial begin
+    #8000000 $display( "INFO: Clear LEDs test" );
+            test_signal = ~test_signal;
+            if(rdid_top.ledMux.LED !== 8'h00) begin
+                $display( "reset case LED failed. Expected 0x00 Actual %h", rdid_top.ledMux.LED );
+                testbench_error = testbench_error + 1;
+			end
+    #1393000 test_signal = ~test_signal;
+        if(rdid_top.ledMux.LED !== 8'hff) begin
+            $display( "default case LED failed. Expected 0xff Actual %h", rdid_top.ledMux.LED );
+            testbench_error = testbench_error + 1;
+        end
+    end
     
     // end of simulation checks
     initial begin 
-        #6500000 if (testbench_error == 0) $display("Test passed!");
+        #10000000 if (testbench_error == 0) $display("Test passed!");
         else $display("Test failed with %d errors", testbench_error);
     end
 endmodule
