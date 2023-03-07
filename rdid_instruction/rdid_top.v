@@ -98,6 +98,7 @@ module rdid_top(
 	);
 
     ledMux ledMux(
+        .reset(reset),
         .SW0(SW0),
         .SW1(SW1),
         .memory_capacity(memory_capacity),
