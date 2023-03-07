@@ -2,7 +2,7 @@
 `default_nettype none
 
 module rdid_top(
-    input wire CCLK,
+    input wire CCLK, //Crystal Clock Oscillator
     input wire reset_btn,
     input wire get_rdid_btn,
     input wire [1:0] SW,
@@ -31,48 +31,48 @@ module rdid_top(
     wire [7:0] memory_capacity;
     wire [7:0] LED;
 
-    // wire CLKDV_OUT;
-    // wire CLKIN_IBUFG_OUT;
-    // wire CLK0_OUT;
+    wire CLKDV_OUT;
+    wire CLKIN_IBUFG_OUT;
+    wire clk;
 
-    // Instantiate the clock divider
-    // clock_divider clock_divider (
-    //     .CLKIN_IN(CCLK), 
-    //     .CLKDV_OUT(CLKDV_OUT), 
-    //     .CLKIN_IBUFG_OUT(CLKIN_IBUFG_OUT), 
-    //     .CLK0_OUT(CLK0_OUT)
-    // );
+    // DCM designed from Xilinx tools
+    clock_divider clock_divider (
+        .CLKIN_IN(CCLK), 
+        .CLKDV_OUT(CLKDV_OUT), 
+        .CLKIN_IBUFG_OUT(CLKIN_IBUFG_OUT), 
+        .CLK0_OUT(clk)
+    );
 
     debounce debounce_get_rdid ( 
-        .clk(CCLK),
+        .clk(clk),
         .data_in(get_rdid_btn),
         .data_debounced(get_rdid_debounced)
     );
     one_shot one_shot_get_rdid (
-        .clk(CCLK),
+        .clk(clk),
         .data_in(get_rdid_debounced),
         .data_out(get_rdid_oneShot)
     ); 
     sync get_rdid_sync(
-        .clk(CCLK),
+        .clk(clk),
         .async_in(get_rdid_oneShot),
         .sync_out(get_rdid)
     );
 
     debounce debounce_reset ( 
-        .clk(CCLK),
+        .clk(clk),
         .data_in(reset_btn),
         .data_debounced(reset_debounced)
     );
     sync reset_sync(
-        .clk(CCLK),
+        .clk(clk),
         .async_in(reset_debounced),
         .sync_out(reset)
     );
 
 	spi_master spi_master (
 		.reset(reset), 
-		.clk(CCLK),
+		.clk(clk),
 		.get_rdid(get_rdid),
 		.SPICLK(SPICLK),
 		.SPIMOSI(SPIMOSI),
