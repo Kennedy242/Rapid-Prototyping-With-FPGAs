@@ -23,8 +23,10 @@ module rdid_top_tb();
     wire LD6;
     wire LD7;
 
-    reg reset_button_push; // Test signal
-    reg rdid_button_push; // Test signal
+    // Test signals
+    reg reset_button_push; 
+    reg rdid_button_push;
+    integer i;
 
     // Instantiate the Unit Under Test (UUT)
     rdid_top rdid_top(
@@ -75,85 +77,45 @@ module rdid_top_tb();
         
         // Start stimulus
         // simulate bouncing
-        //  TODO: make this a for loop
         #200 reset_button_push = 1;
         reset_btn = 1;
-        #0.5 reset_btn = 0;
-        #0.5 reset_btn = 1;
-        #0.5 reset_btn = 0;
-        #0.5 reset_btn = 1;
-        #0.5 reset_btn = 0;
-        #0.5 reset_btn = 1;
-        #0.5 reset_btn = 0;
-        #0.5 reset_btn = 1;
-        #0.5 reset_btn = 0;
-        #0.5 reset_btn = 1;
+        for (i=0; i<10; i = i + 1) begin
+            #0.5 reset_btn = ~reset_btn;
+        end
 
         #1310900 reset_btn = 0;
-        #0.5 reset_btn = 1;
-        #0.5 reset_btn = 0;
-        #0.5 reset_btn = 1;
-        #0.5 reset_btn = 0;
-        #0.5 reset_btn = 1;
-        #0.5 reset_btn = 0;
-        #0.5 reset_btn = 1;
-        #0.5 reset_btn = 0;
+         for (i=0; i<8; i = i + 1) begin
+            #0.5 reset_btn = ~reset_btn;
+        end
         reset_button_push = 0;
         // end of simulated bounce
 
         // simulate bouncing
-        //  TODO: make this a for loop
         #200000 rdid_button_push = 1;
         get_rdid_btn = 1;
-        #0.5 get_rdid_btn = 0;
-        #0.5 get_rdid_btn = 1;
-        #0.5 get_rdid_btn = 0;
-        #0.5 get_rdid_btn = 1;
-        #0.5 get_rdid_btn = 0;
-        #0.5 get_rdid_btn = 1;
-        #0.5 get_rdid_btn = 0;
-        #0.5 get_rdid_btn = 1;
-        #0.5 get_rdid_btn = 0;
-        #0.5 get_rdid_btn = 1;
+        for (i=0; i<10; i = i + 1) begin
+            #0.5 get_rdid_btn = ~get_rdid_btn;
+        end
 
         #1310900 get_rdid_btn = 0;
-        #0.5 get_rdid_btn = 1;
-        #0.5 get_rdid_btn = 0;
-        #0.5 get_rdid_btn = 1;
-        #0.5 get_rdid_btn = 0;
-        #0.5 get_rdid_btn = 1;
-        #0.5 get_rdid_btn = 0;
-        #0.5 get_rdid_btn = 1;
-        #0.5 get_rdid_btn = 0;
-        rdid_button_push = 0;
+        for (i=0; i<8; i = i + 1) begin
+            #0.5 get_rdid_btn = ~get_rdid_btn;
+        end
         // end of simulated bounce
 
 
         // Another RDID assertion
         // simulate bouncing
-        //  TODO: make this a for loop
         #2000000  rdid_button_push = 1;
         get_rdid_btn = 1;
-        #0.5 get_rdid_btn = 0;
-        #0.5 get_rdid_btn = 1;
-        #0.5 get_rdid_btn = 0;
-        #0.5 get_rdid_btn = 1;
-        #0.5 get_rdid_btn = 0;
-        #0.5 get_rdid_btn = 1;
-        #0.5 get_rdid_btn = 0;
-        #0.5 get_rdid_btn = 1;
-        #0.5 get_rdid_btn = 0;
-        #0.5 get_rdid_btn = 1;
+        for (i=0; i<10; i = i + 1) begin
+            #0.5 get_rdid_btn = ~get_rdid_btn;
+        end
 
         #1310900 get_rdid_btn = 0;
-        #0.5 get_rdid_btn = 1;
-        #0.5 get_rdid_btn = 0;
-        #0.5 get_rdid_btn = 1;
-        #0.5 get_rdid_btn = 0;
-        #0.5 get_rdid_btn = 1;
-        #0.5 get_rdid_btn = 0;
-        #0.5 get_rdid_btn = 1;
-        #0.5 get_rdid_btn = 0;
+        for (i=0; i<8; i = i + 1) begin
+            #0.5 get_rdid_btn = ~get_rdid_btn;
+        end
         rdid_button_push = 0;
         // end of simulated bounce
     end
