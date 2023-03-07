@@ -1,5 +1,6 @@
 module ledMux (
-    input wire [1:0] SW,
+    input wire SW0,
+    input wire SW1,
     input wire [7:0] memory_capacity,
     input wire [7:0] memory_type,
     input wire [7:0] manufacture_id,
@@ -9,7 +10,7 @@ module ledMux (
 localparam defaultCase = 8'hff;
 
 always @(*) begin       
-    case(SW)
+    case({SW1, SW0})
     2'b00: LED <= memory_capacity;
     2'b01: LED <= memory_type;
     2'b10: LED <= manufacture_id;

@@ -94,7 +94,7 @@ module spi_master(
         if(reset == 1) count_data <= count_data_start;
         else if (get_rdid) count_data <= count_data_start;
         else if(get_data_flag && SPICLK) begin
-            count_data <= count_data - 1;
+            count_data <= count_data - 1'b1;
         end
     end
 

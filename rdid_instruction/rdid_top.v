@@ -5,11 +5,12 @@ module rdid_top(
     input wire CCLK, //Crystal Clock Oscillator
     input wire reset_btn,
     input wire get_rdid_btn,
-    input wire [1:0] SW,
+    input wire SW0,
+    input wire SW1,
     input wire SPIMISO,
     output wire SPICLK,
     output wire SPIMOSI,
-    output wire chip_select,
+    output wire SPISF, // cs for ST Micro serial flash
     output wire LD0,
     output wire LD1,
     output wire LD2,
@@ -17,7 +18,12 @@ module rdid_top(
     output wire LD4,
     output wire LD5,
     output wire LD6,
-    output wire LD7
+    output wire LD7,
+    output wire AMPCS,
+    output wire DACCS,
+    output wire ADCON,
+    output wire SFCE,
+    output wire FPGAIB
 );
 
     // Internal signals
@@ -31,15 +37,23 @@ module rdid_top(
     wire [7:0] memory_capacity;
     wire [7:0] LED;
 
-    wire CLKDV_OUT;
-    wire CLKIN_IBUFG_OUT;
+    // FPGA NETs SPI Bus
+    assign AMPCS = 1;  // cs for PreAmp
+    assign DACCS = 1;  // cs for DAC active low
+    assign ADCON = 0;  //cs for ADC active high
+    assign SFCE = 1;   //cs for parallel flash active low
+    assign FPGAIB = 0; //cs for platform flash active high
+
+
+    // wire CLKDV_OUT;
+    // wire CLKIN_IBUFG_OUT;
     wire clk;
 
     // DCM designed from Xilinx tools
     clock_divider clock_divider (
-        .CLKIN_IN(CCLK), 
-        .CLKDV_OUT(CLKDV_OUT), 
-        .CLKIN_IBUFG_OUT(CLKIN_IBUFG_OUT), 
+        .CLKIN_IN(CCLK),
+        // .CLKDV_OUT(CLKDV_OUT),
+        // .CLKIN_IBUFG_OUT(CLKIN_IBUFG_OUT),
         .CLK0_OUT(clk)
     );
 
@@ -77,14 +91,15 @@ module rdid_top(
 		.SPICLK(SPICLK),
 		.SPIMOSI(SPIMOSI),
 		.SPIMISO(SPIMISO),
-		.chip_select(chip_select),
+		.chip_select(SPISF),
         .manufacture_id(manufacture_id),
         .memory_type(memory_type),
         .memory_capacity(memory_capacity)
 	);
 
     ledMux ledMux(
-        .SW(SW),
+        .SW0(SW0),
+        .SW1(SW1),
         .memory_capacity(memory_capacity),
         .memory_type(memory_type),
         .manufacture_id(manufacture_id),

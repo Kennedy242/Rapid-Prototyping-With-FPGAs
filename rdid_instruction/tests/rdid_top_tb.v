@@ -7,7 +7,8 @@ module rdid_top_tb();
     reg clk;
     reg reset_btn;
     reg get_rdid_btn;
-    reg [1:0] SW;
+    reg SW0;
+    reg SW1;
     wire SPIMISO;
     
     // Outputs
@@ -22,6 +23,11 @@ module rdid_top_tb();
     wire LD5;
     wire LD6;
     wire LD7;
+    wire AMPCS;
+    wire DACCS;
+    wire ADCON;
+    wire SFCE;
+    wire FPGAIB;
 
     // Test signals
     reg reset_button_push; 
@@ -33,11 +39,12 @@ module rdid_top_tb();
         .CCLK(clk),
         .reset_btn(reset_btn),
         .get_rdid_btn(get_rdid_btn),
-        .SW(SW),
+        .SW0(SW0),
+        .SW1(SW1),
         .SPIMISO(SPIMISO),
         .SPICLK(SPICLK),
         .SPIMOSI(SPIMOSI),
-        .chip_select(chip_select),
+        .SPISF(chip_select),
         .LD0(LD0),
         .LD1(LD1),
         .LD2(LD2),
@@ -45,7 +52,12 @@ module rdid_top_tb();
         .LD4(LD4),
         .LD5(LD5),
         .LD6(LD6),
-        .LD7(LD7)
+        .LD7(LD7),
+        .AMPCS(AMPCS),
+        .DACCS(DACCS),
+        .ADCON(ADCON),
+        .SFCE(SFCE),
+        .FPGAIB(FPGAIB)
     );
 
     m25p16 m25p16(
@@ -68,7 +80,7 @@ module rdid_top_tb();
         // Initialize inputs
         reset_btn = 0;
         get_rdid_btn = 0;
-        SW = 2'b00;
+        {SW1,SW0} = 2'b00;
         reset_button_push = 0;
         rdid_button_push = 0;
         
@@ -132,19 +144,19 @@ module rdid_top_tb();
                 $display( "mem cap LED failed. Expected 0x15 Actual %h", rdid_top.ledMux.LED );
                 testbench_error = testbench_error + 1;
 			end
-        #10 SW = 2'b01;
+        #10 {SW1,SW0} = 2'b01;
         #10 test_signal = ~test_signal;
             if(rdid_top.ledMux.LED !== 8'h20) begin
                 $display( "mem type LED failed. Expected 0x20 Actual %h", rdid_top.ledMux.LED );
                 testbench_error = testbench_error + 1;
 			end
-        #10 SW = 2'b10;
+        #10 {SW1,SW0} = 2'b10;
         #10 test_signal = ~test_signal;
             if(rdid_top.ledMux.LED !== 8'h20) begin
                 $display( "man ID LED failed. Expected 0x20 Actual %h", rdid_top.ledMux.LED );
                 testbench_error = testbench_error + 1;
 			end
-        #10 SW = 2'b11;
+        #10 {SW1,SW0} = 2'b11;
         #10 test_signal = ~test_signal;
             if(rdid_top.ledMux.LED !== 8'hFF) begin
                 $display( "default case LED failed. Expected 0xFF Actual %h", rdid_top.ledMux.LED );
@@ -152,25 +164,25 @@ module rdid_top_tb();
 			end
         #3312335
             $display( "INFO: second rdid check" );
-            SW = 2'b00;
+            {SW1,SW0} = 2'b00;
         #10 test_signal = ~test_signal; 
             if(rdid_top.ledMux.LED !== 8'h15) begin
                 $display( "mem cap LED failed. Expected 0x15 Actual %h", rdid_top.ledMux.LED );
                 testbench_error = testbench_error + 1;
 			end
-        #10 SW = 2'b01;
+        #10 {SW1,SW0} = 2'b01;
         #10 test_signal = ~test_signal;
             if(rdid_top.ledMux.LED !== 8'h20) begin
                 $display( "mem type LED failed. Expected 0x20 Actual %h", rdid_top.ledMux.LED );
                 testbench_error = testbench_error + 1;
 			end
-        #10 SW = 2'b10;
+        #10 {SW1,SW0} = 2'b10;
         #10 test_signal = ~test_signal;
             if(rdid_top.ledMux.LED !== 8'h20) begin
                 $display( "man ID LED failed. Expected 0x20 Actual %h", rdid_top.ledMux.LED );
                 testbench_error = testbench_error + 1;
 			end
-        #10 SW = 2'b11;
+        #10 {SW1,SW0} = 2'b11;
         #10 test_signal = ~test_signal;
             if(rdid_top.ledMux.LED !== 8'hFF) begin
                 $display( "default case LED failed. Expected 0xFF Actual %h", rdid_top.ledMux.LED );
