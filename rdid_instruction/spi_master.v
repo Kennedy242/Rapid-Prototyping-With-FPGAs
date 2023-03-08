@@ -98,8 +98,10 @@ module spi_master(
         end
     end
 
-    always @(posedge SPICLK ) begin
-        read_data[count_data] = SPIMISO; // get data from slave
+    // get data from slave
+    always @(posedge SPICLK or posedge reset) begin
+        if(reset) read_data = 0;
+        else read_data[count_data] = SPIMISO;
     end
 
     assign manufacture_id = read_data[23:16];
