@@ -44,6 +44,9 @@ module rdid_top(
     assign SFCE = 1;   //cs for parallel flash active low
     assign FPGAIB = 0; //cs for platform flash active high
 
+    // debugging
+    wire [35:0] CONTROL;
+
 
     // wire CLKDV_OUT;
     // wire CLKIN_IBUFG_OUT;
@@ -52,9 +55,9 @@ module rdid_top(
     // DCM designed from Xilinx tools
     clock_divider clock_divider (
         .CLKIN_IN(CCLK),
-        // .CLKDV_OUT(CLKDV_OUT),
+        .CLKDV_OUT(clk)
         // .CLKIN_IBUFG_OUT(CLKIN_IBUFG_OUT),
-        .CLK0_OUT(clk)
+        // .CLK0_OUT(clk)
     );
 
     debounce debounce_get_rdid ( 
@@ -114,5 +117,24 @@ module rdid_top(
     assign LD5 = LED[5];
     assign LD6 = LED[6];
     assign LD7 = LED[7];
+
+    icon icon (
+    .CONTROL0(CONTROL)
+    );
+    ila ila (
+        .CONTROL(CONTROL),
+        .CLK(clk),
+        .TRIG0({
+            get_rdid,
+            SPICLK,
+            SPIMISO,
+            SPIMOSI,
+            SPISF,
+            memory_capacity[2],
+            memory_capacity[1],
+            memory_capacity[0]
+        })
+    );
+
 
 endmodule
