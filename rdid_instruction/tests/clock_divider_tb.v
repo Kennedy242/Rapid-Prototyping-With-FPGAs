@@ -22,7 +22,7 @@ clock_divider clock_divider (
     // System clock
     always begin 
         CLKIN_IN = 1'b0;
-        forever #10 CLKIN_IN = ~CLKIN_IN;
+        forever #10 CLKIN_IN = ~CLKIN_IN; // 50MHz clk
     end
     
 endmodule
