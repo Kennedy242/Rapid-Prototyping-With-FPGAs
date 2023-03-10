@@ -10,7 +10,7 @@ module rdid_top(
     input wire SPIMISO,
     output wire SPICLK,
     output wire SPIMOSI,
-    output wire SPISF, // cs for ST Micro serial flash
+    output wire cs_prom_n,
     output wire LD0,
     output wire LD1,
     output wire LD2,
@@ -19,11 +19,11 @@ module rdid_top(
     output wire LD5,
     output wire LD6,
     output wire LD7,
-    output wire AMPCS,
-    output wire DACCS,
-    output wire ADCON,
-    output wire SFCE,
-    output wire FPGAIB
+    output wire cs_pre_amp_n,
+    output wire cs_dac_n,
+    output wire cs_a2d,
+    output wire cs_parallel_flash_n,
+    output wire cs_platform_flash
 );
 
     // Internal signals
@@ -32,32 +32,26 @@ module rdid_top(
     wire get_rdid;
     wire reset_debounced;
     wire reset;
+    wire clk;
     wire [7:0] manufacture_id;
     wire [7:0] memory_type;
     wire [7:0] memory_capacity;
     wire [7:0] LED;
 
     // FPGA NETs SPI Bus
-    assign AMPCS = 1;  // cs for PreAmp
-    assign DACCS = 1;  // cs for DAC active low
-    assign ADCON = 0;  //cs for ADC active high
-    assign SFCE = 1;   //cs for parallel flash active low
-    assign FPGAIB = 0; //cs for platform flash active high
+    assign cs_pre_amp_n = 1;
+    assign cs_dac_n = 1;
+    assign cs_a2d = 0;
+    assign cs_parallel_flash_n = 1;
+    assign cs_platform_flash = 0;
 
-    // debugging
+    // debugging signal
     wire [35:0] CONTROL;
-
-
-    // wire CLKDV_OUT;
-    // wire CLKIN_IBUFG_OUT;
-    wire clk;
 
     // DCM designed from Xilinx tools
     clock_divider clock_divider (
         .CLKIN_IN(CCLK),
         .CLKDV_OUT(clk)
-        // .CLKIN_IBUFG_OUT(CLKIN_IBUFG_OUT),
-        // .CLK0_OUT(clk)
     );
 
     debounce debounce_get_rdid ( 
@@ -94,7 +88,7 @@ module rdid_top(
 		.SPICLK(SPICLK),
 		.SPIMOSI(SPIMOSI),
 		.SPIMISO(SPIMISO),
-		.chip_select(SPISF),
+		.chip_select(cs_prom_n),
         .manufacture_id(manufacture_id),
         .memory_type(memory_type),
         .memory_capacity(memory_capacity)
@@ -129,7 +123,7 @@ module rdid_top(
             SPICLK,
             SPIMISO,
             SPIMOSI,
-            SPISF,
+            cs_prom_n,
             memory_capacity[2],
             memory_capacity[1],
             memory_capacity[0]
