@@ -16,6 +16,13 @@ iseconfig/
 *.gise
 *.xise
 *.wcfg
+*_arwz.ucf
+*.xwbt
+impact.xsl
+*.ncd
+*.cpj
+*.ipf
+*_impact.xml
 
 # not related to FPGA
 *.code-workspace
