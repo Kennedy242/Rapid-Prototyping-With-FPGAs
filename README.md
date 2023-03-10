@@ -8,6 +8,8 @@ This repo will store the projects created for the course ECE-5211 Rapid Prototyp
 * Design, simulate and synthesize a serial peripheral interface (SPI) to support an RDID instruction
 ###### Homework 5 - rdid_instruction
 * Implement the SPI master for the ST Micro M25P16 Serial Flash designed in the previous lab on the Spartan 3E demo prototyping board
+###### Homework 6 - display_to_lcd
+- Display the data received from the SPI bus to the LCD on the Spartan 3E demo prototyping board
     
  <br>
 
