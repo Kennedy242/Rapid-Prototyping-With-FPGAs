@@ -92,12 +92,12 @@ module rdid_top_tb();
         #200 reset_button_push = 1;
         reset_btn = 1;
         for (i=0; i<10; i = i + 1) begin
-            #0.5 reset_btn = ~reset_btn;
+            #80 reset_btn = ~reset_btn;
         end
 
-        #1310900 reset_btn = 0;
+        #81931 reset_btn = 0;
          for (i=0; i<8; i = i + 1) begin
-            #0.5 reset_btn = ~reset_btn;
+            #80 reset_btn = ~reset_btn;
         end
         reset_button_push = 0;
         // end of simulated bounce
@@ -106,12 +106,12 @@ module rdid_top_tb();
         #200000 rdid_button_push = 1;
         get_rdid_btn = 1;
         for (i=0; i<10; i = i + 1) begin
-            #0.5 get_rdid_btn = ~get_rdid_btn;
+            #80 get_rdid_btn = ~get_rdid_btn;
         end
 
         #1310900 get_rdid_btn = 0;
         for (i=0; i<8; i = i + 1) begin
-            #0.5 get_rdid_btn = ~get_rdid_btn;
+            #80 get_rdid_btn = ~get_rdid_btn;
         end
         rdid_button_push = 0;
         // end of simulated bounce
@@ -122,12 +122,12 @@ module rdid_top_tb();
         #2000000  rdid_button_push = 1;
         get_rdid_btn = 1;
         for (i=0; i<10; i = i + 1) begin
-            #0.5 get_rdid_btn = ~get_rdid_btn;
+            #80 get_rdid_btn = ~get_rdid_btn;
         end
 
         #1310900 get_rdid_btn = 0;
         for (i=0; i<8; i = i + 1) begin
-            #0.5 get_rdid_btn = ~get_rdid_btn;
+            #80 get_rdid_btn = ~get_rdid_btn;
         end
         rdid_button_push = 0;
         // end of simulated bounce
@@ -136,12 +136,12 @@ module rdid_top_tb();
         #500000 reset_button_push = 1;
         reset_btn = 1;
         for (i=0; i<10; i = i + 1) begin
-            #0.5 reset_btn = ~reset_btn;
+            #80 reset_btn = ~reset_btn;
         end
 
         #1310900 reset_btn = 0;
          for (i=0; i<8; i = i + 1) begin
-            #0.5 reset_btn = ~reset_btn;
+            #80 reset_btn = ~reset_btn;
         end
         reset_button_push = 0;
         // end of simulated bounce
@@ -153,31 +153,33 @@ module rdid_top_tb();
     
     initial begin
         #10 $display("*************** test begin *******************");
-        #2823240 $display( "INFO: first  rdid test" );
+        #1615900 $display( "INFO: first  rdid test" );
             test_signal = ~test_signal;
             if(rdid_top.ledMux.LED !== 8'h15) begin
                 $display( "mem cap LED failed. Expected 0x15 Actual %h", rdid_top.ledMux.LED );
                 testbench_error = testbench_error + 1;
 			end
-        #10 {SW1,SW0} = 2'b01;
-        #10 test_signal = ~test_signal;
+        #160 {SW1,SW0} = 2'b01;
+        #160 test_signal = ~test_signal;
             if(rdid_top.ledMux.LED !== 8'h20) begin
                 $display( "mem type LED failed. Expected 0x20 Actual %h", rdid_top.ledMux.LED );
                 testbench_error = testbench_error + 1;
 			end
-        #10 {SW1,SW0} = 2'b10;
-        #10 test_signal = ~test_signal;
+        #160 {SW1,SW0} = 2'b10;
+        #160 test_signal = ~test_signal;
             if(rdid_top.ledMux.LED !== 8'h20) begin
                 $display( "man ID LED failed. Expected 0x20 Actual %h", rdid_top.ledMux.LED );
                 testbench_error = testbench_error + 1;
 			end
-        #10 {SW1,SW0} = 2'b11;
-        #10 test_signal = ~test_signal;
+        #160 {SW1,SW0} = 2'b11;
+        #160 test_signal = ~test_signal;
             if(rdid_top.ledMux.LED !== 8'hFF) begin
                 $display( "default case LED failed. Expected 0xFF Actual %h", rdid_top.ledMux.LED );
                 testbench_error = testbench_error + 1;
 			end
-        #3312335
+    end
+    initial begin
+        #4930100
             $display( "INFO: second rdid test" );
             {SW1,SW0} = 2'b00;
         #10 test_signal = ~test_signal; 

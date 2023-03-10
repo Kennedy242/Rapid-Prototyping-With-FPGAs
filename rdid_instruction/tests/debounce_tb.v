@@ -28,7 +28,7 @@ module debounce_tb;
     // system clock
 	always begin 
 		clk = 1'b0;
-		forever #10 clk = ~clk;
+		forever #160 clk = ~clk; //50Mhz
 	end
 
     // Stimulus for UUT
