@@ -22,6 +22,11 @@ module command(
     output wire cs_prom_n
 );
 
+    wire LD0, LD1, LD2, LD3, LD4, LD5, LD6, LD7;
+    assign {LD0, LD1, LD2, LD3, LD4, LD5, LD6, LD7} = LED;
+    wire SW0, SW1;
+    assign {SW1, SW0} = SW;
+
     // internal signals
     wire get_rdid_debounced;
     wire get_rdid_oneShot;
