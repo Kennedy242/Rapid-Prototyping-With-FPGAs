@@ -137,6 +137,10 @@ module command_tb();
                 $display( "default case LED failed. Expected 0xFF Actual %h", LED );
                 testbench_error = testbench_error + 1;
 			end
+            if(command.data_to_write != 256'h4341503d307831352049443d30783230545950453d3078323000000000000000) begin
+                $display("data_to_write is incorrect. Actual value: ", command.data_to_write);
+                testbench_error = testbench_error + 1;
+            end
     end
     
     // end of simulation checks
