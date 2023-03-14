@@ -23,11 +23,11 @@ module rdid_top_tb();
     wire LD5;
     wire LD6;
     wire LD7;
-    wire AMPCS;
-    wire DACCS;
-    wire ADCON;
-    wire SFCE;
-    wire FPGAIB;
+    wire cs_pre_amp_n;
+    wire cs_dac_n;
+    wire cs_a2d;
+    wire cs_parallel_flash_n;
+    wire cs_platform_flash;
 
     // Test signals
     reg reset_button_push; 
@@ -44,7 +44,7 @@ module rdid_top_tb();
         .SPIMISO(SPIMISO),
         .SPICLK(SPICLK),
         .SPIMOSI(SPIMOSI),
-        .SPISF(chip_select),
+        .cs_prom_n(chip_select),
         .LD0(LD0),
         .LD1(LD1),
         .LD2(LD2),
@@ -53,11 +53,11 @@ module rdid_top_tb();
         .LD5(LD5),
         .LD6(LD6),
         .LD7(LD7),
-        .AMPCS(AMPCS),
-        .DACCS(DACCS),
-        .ADCON(ADCON),
-        .SFCE(SFCE),
-        .FPGAIB(FPGAIB)
+        .cs_pre_amp_n(cs_pre_amp_n),
+        .cs_dac_n(cs_dac_n),
+        .cs_a2d(cs_a2d),
+        .cs_parallel_flash_n(cs_parallel_flash_n),
+        .cs_platform_flash(cs_platform_flash)
     );
 
     m25p16 m25p16(
